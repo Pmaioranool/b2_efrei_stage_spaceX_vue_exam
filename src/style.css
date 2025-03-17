@@ -2,11 +2,24 @@
 
 @theme {
   --color-primary: #101010;
-  --color-secondary: #b7711c;
+  --color-secondary: #d26516;
+  --color-secondary-500: #9f4d11;
   --color-tertiary: #dedede;
 }
 
 body {
   background-color: var(--color-primary);
   color: var(--color-tertiary);
+}
+
+header {
+  min-height: 10vh;
+}
+
+main {
+  min-height: 76.5vh;
+}
+
+footer {
+  min-height: 10vh;
 }

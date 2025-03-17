@@ -1,45 +1,51 @@
 <template>
-  <!-- next launch section -->
-  <router-link :to="'/launches/' + nextLaunch.id">
-    <section class="px-4 py-2 sm:px-8 sm:py-3">
-      <h2 class="">Prochain lancement</h2>
-      <p>
-        Le prochain lancement
-        <span class="font-semibold">{{ nextLaunch.name }}</span>
-        est prévu pour le
-        {{ formattedDate }} ({{ timeRemaining }})
-      </p>
-      <p>Décompte : {{ countdown }} secondes</p>
+  <main>
+    <!-- next launch section -->
+    <router-link :to="'/launches/' + nextLaunch.id">
+      <section class="bg-primary px-4 py-2 sm:px-8 sm:py-3">
+        <h2 class="mb-2 text-xl font-bold">Prochain lancement</h2>
+        <p class="text-lg">
+          Le prochain lancement
+          <span class="font-semibold">{{ nextLaunch.name }}</span>
+          est prévu pour le
+          {{ formattedDate }} ({{ timeRemaining }})
+        </p>
+        <p class="text-lg">
+          Décompte : <span class="font-semibold">{{ countdown }}</span> secondes
+        </p>
+      </section>
+    </router-link>
+
+    <!-- filter form -->
+    <section class="mt-8">
+      <h2 class="mb-2 text-xl font-bold">Filtre des missions</h2>
+      <form action="">
+        <select
+          name=""
+          id=""
+          class="focus:ring-primary bg-primary rounded-md border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:outline-none sm:px-8 sm:py-3"
+          v-model="filter"
+        >
+          <option value="all">Tous les lancements</option>
+          <option value="success">Lancements réussis</option>
+          <option value="failure">Lancements échoués</option>
+        </select>
+      </form>
     </section>
-  </router-link>
 
-  <!-- filter form -->
-  <section>
-    <!-- watch to see if the select change -->
-    <h2>filtre des mission</h2>
-    <form action="">
-      <select
-        name=""
-        id=""
-        class="bg-primary px-4 py-2 sm:px-8 sm:py-3"
-        v-model="filter"
-      >
-        <option value="all">Tous les lancements</option>
-        <option value="success">Lancements réussis</option>
-        <option value="failure">Lancements échoués</option>
-      </select>
-    </form>
-  </section>
-
-  <!-- select of others missions -->
-  <section>
-    <h3>Les autres mission</h3>
-    <LaunchComponent
-      v-for="launch in filteredLaunches.slice(-10)"
-      :key="launch.id"
-      :data="launch"
-    ></LaunchComponent>
-  </section>
+    <!-- select of others missions -->
+    <section class="mt-8">
+      <h3 class="mb-2 text-xl font-bold">Les autres missions</h3>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <LaunchComponent
+          v-for="launch in filteredLaunches.slice(-12)"
+          :key="launch.id"
+          :data="launch"
+          class="bg-secondary ml-50 flex size-100 h-32 flex-wrap items-center justify-center rounded-lg p-4 text-center shadow-md"
+        ></LaunchComponent>
+      </div>
+    </section>
+  </main>
 </template>
 
 <script lang="ts" setup>

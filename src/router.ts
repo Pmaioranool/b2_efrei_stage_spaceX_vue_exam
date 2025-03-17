@@ -10,6 +10,10 @@ const routes = [
     {
         path: '/launches/:id',
         component: LaunchPage
+    },
+    {
+        path: '/launches',
+        component: HomePage
     }
 ]
 

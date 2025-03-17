@@ -114,7 +114,6 @@ const launchFetch = useFetch(
 
 watch(launchFetch.data, (newData) => {
   if (newData) {
-    console.log(newData);
     launch.value = newData;
     date.value = newData.date_local;
     payloadId.value = newData.payloads;
@@ -161,7 +160,6 @@ async function launchPadFetch(launchPadId: string) {
 
   watch(launchPadFetch.data, (newData) => {
     if (newData) {
-      // console.log(newData);
       launchpad.value = newData;
     }
   });

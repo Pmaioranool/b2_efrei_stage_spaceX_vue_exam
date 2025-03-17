@@ -9,6 +9,7 @@
         est prévu pour le
         {{ formattedDate }} ({{ timeRemaining }})
       </p>
+      <p>Décompte : {{ countdown }} secondes</p>
     </section>
   </router-link>
 
@@ -76,6 +77,15 @@ const timeRemaining = computed(() => {
     return formatDistanceToNow(new Date(date.value), { addSuffix: true });
   }
   return date.value;
+});
+
+const countdown = computed(() => {
+  if (date.value) {
+    const launchDate = new Date(date.value).getTime();
+    const now = new Date().getTime();
+    return Math.max(Math.floor((launchDate - now) / 1000), 0);
+  }
+  return 0;
 });
 
 const filter = ref("all");

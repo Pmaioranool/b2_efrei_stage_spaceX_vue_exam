@@ -34,7 +34,7 @@
   <section>
     <h3>Les autres mission</h3>
     <LaunchComponent
-      v-for="launch in oldLaunches"
+      v-for="launch in filteredLaunches.slice(-10)"
       :key="launch.id"
       :data="launch"
     ></LaunchComponent>
@@ -46,27 +46,12 @@ import LaunchComponent from "../components/LaunchComponent.vue";
 import { ref, watch, computed } from "vue";
 import { useFetch } from "../api/launchInfo";
 import { format, formatDistanceToNow } from "date-fns";
-
-export interface Launch {
-  id: string;
-  name: string;
-  date_local: string;
-  text?: string;
-  Image?: string;
-  link?: string;
-  ytbLink?: string;
-  location?: string;
-  payloads?: string;
-  clients?: string;
-}
+import type { Launch } from "../Types/LaunchDetails";
 
 const nextLaunch = ref<Launch>({ id: "", name: "", date_local: "" });
 const date = ref("");
 
-const oldLaunches = ref<Launch[]>([
-  { id: "", name: "", date_local: "" },
-  { id: "", name: "", date_local: "" },
-]);
+const oldLaunches = ref<Launch[]>([]);
 
 const NextLaunchFetch = useFetch(
   "https://api.spacexdata.com/v5/launches/latest",
@@ -74,7 +59,6 @@ const NextLaunchFetch = useFetch(
 
 watch(NextLaunchFetch.data, (newData) => {
   if (newData) {
-    console.log(newData);
     nextLaunch.value = newData;
     date.value = newData.date_local;
   }
@@ -96,18 +80,27 @@ const timeRemaining = computed(() => {
 
 const filter = ref("all");
 
-watch(filter, (newVal) => {
-  console.log(newVal);
-});
-
 const oldLaunchesFetch = useFetch(
   "https://api.spacexdata.com/v5/launches/past",
 );
 
 watch(oldLaunchesFetch.data, (newData) => {
   if (newData) {
-    console.log(newData);
-    oldLaunches.value = newData.slice(-10); // Prendre les 10 derniers lancements
+    oldLaunches.value = newData.map((launch: any) => ({
+      ...launch,
+      date_local: format(new Date(launch.date_local), "dd/MM/yyyy"),
+    }));
   }
+});
+
+const filteredLaunches = computed(() => {
+  if (filter.value === "all") {
+    return oldLaunches.value;
+  } else if (filter.value === "success") {
+    return oldLaunches.value.filter((launch) => launch.success);
+  } else if (filter.value === "failure") {
+    return oldLaunches.value.filter((launch) => !launch.success);
+  }
+  return oldLaunches.value;
 });
 </script>
